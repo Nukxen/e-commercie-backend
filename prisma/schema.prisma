@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Products {
+  id String @id @default(cuid())
+  name String
+  description String?
+  price Float?
+  Images Images[]
+  categoryId String?
+  category Categorys? @relation(fields: [categoryId], references: [id])
+}
+
+model Images {
+  id String @id @default(cuid())
+  url String
+  productId String
+  product Products @relation(fields: [productId], references: [id])
+}
+
+model Categorys {
+  id String @id @default(cuid())
+  name String
+  products Products[]
+}
