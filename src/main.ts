@@ -1,13 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { validateOrReject } from 'class-validator';
 import { AppModule, ObserveInstrument } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     instrument: ObserveInstrument,
   });
   //Faz todas as rotas tem o prefixo api/v1, exemplo: api/v1/users
-  app.setGlobalPrefix('api/v1');
-
+  app.setGlobalPrefix('/v1');
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const swaggerConfig = new DocumentBuilder()
     .setTitle('E-Commerce API')
     .setDescription('API for managing e-commerce operations')
